@@ -19,8 +19,6 @@
 # limitations under the License.
 #
 
-Chef::Log.debug("Squid setup. Network details: #{node['network'].inspect}")
-
 # variables
 ipaddress = node['squid']['ipaddress']
 listen_interface = node['squid']['listen_interface']
