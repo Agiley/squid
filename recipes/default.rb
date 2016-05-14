@@ -83,8 +83,18 @@ template node['squid']['config_file'] do
 end
 
 # services
+service_provider = nil
+
+if platform?('ubuntu')
+  if Chef::VersionConstraint.new('>= 15.04').include?(node['platform_version'])
+    service_provider = Chef::Provider::Service::Systemd
+  elsif Chef::VersionConstraint.new('>= 12.04').include?(node['platform_version'])
+    service_provider = Chef::Provider::Service::Upstart
+  end
+end
+
 service node['squid']['service_name'] do
+  provider service_provider if platform?('ubuntu')
   supports :restart => true, :status => true, :reload => true
-  provider Chef::Provider::Service::Upstart if platform?('ubuntu')
   action [:enable, :start]
 end
