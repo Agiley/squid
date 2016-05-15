@@ -54,7 +54,7 @@ default['squid']['ldap_binddn']       = nil   # 'uid=some-user,ou=People,dc=here
 default['squid']['ldap_bindpassword'] = nil   # 'some_password'
 default['squid']['ldap_searchfilter'] = nil   # 'uid=%s'
 default['squid']['ldap_version']      = 3     # LDAP v. 2 or 3
-default['squid']['ldap_program']      = '/usr/lib/squid3/basic_ldap_auth' # Default set for Ubuntu 14
+default['squid']['ldap_program']      = '/usr/lib/squid/basic_ldap_auth'
 default['squid']['ldap_authchildren'] = 5     # Number of LDAP threads to start
 default['squid']['ldap_authrealm']    = 'Web-Proxy'   # Authentication Realm
 default['squid']['ldap_authcredentialsttl'] = '1 minute'  # Credentials TTL
@@ -83,7 +83,18 @@ when 'debian'
       default['squid']['log_dir'] = '/var/log/squid3'
       default['squid']['cache_dir'] = '/var/spool/squid3'
       default['squid']['coredump_dir'] = '/var/spool/squid3'
+      default['squid']['ldap_program'] = '/usr/lib/squid3/basic_ldap_auth'
       default['squid']['service_name'] = 'squid3'
+    elsif node['platform_version'] == '16.04' || node['platform_version'] =~ /1[56]\./
+      default['squid']['package'] = 'squid'
+      default['squid']['version'] = '3.3.8' if node['platform_version'] =~ /15\./
+      default['squid']['version'] = '3.5.12' if node['platform_version'] =~ /16\./
+      default['squid']['config_dir'] = '/etc/squid'
+      default['squid']['config_file'] = '/etc/squid/squid.conf'
+      default['squid']['log_dir'] = '/var/log/squid'
+      default['squid']['cache_dir'] = '/var/spool/squid'
+      default['squid']['coredump_dir'] = '/var/spool/squid'
+      default['squid']['service_name'] = 'squid'
     end
   end
 

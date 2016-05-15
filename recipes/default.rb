@@ -45,7 +45,7 @@ package node['squid']['package']
 # rhel_family sysconfig
 template '/etc/sysconfig/squid' do
   source 'redhat/sysconfig/squid.erb'
-  notifies :restart, "service[#{node['squid']['service_name']}]", :delayed
+  notifies :restart, "service[squid]", :delayed
   mode 00644
   only_if { platform_family? 'rhel', 'fedora' }
 end
@@ -72,7 +72,7 @@ end
 # squid config
 template node['squid']['config_file'] do
   source 'squid.conf.erb'
-  notifies :reload, "service[#{node['squid']['service_name']}]"
+  notifies :reload, "service[squid]"
   mode 00644
   variables(
     :host_acl => host_acl,
@@ -93,7 +93,8 @@ if platform?('ubuntu')
   end
 end
 
-service node['squid']['service_name'] do
+service 'squid' do
+  service_name node['squid']['service_name']
   provider service_provider if platform?('ubuntu')
   supports :restart => true, :status => true, :reload => true
   action [:enable, :start]
