@@ -75,10 +75,11 @@ when 'debian'
   when 'ubuntu'
     if node['platform_version'] == '10.04'
       default['squid']['version'] = '2.7'
-    elsif node['platform_version'] == '12.04' || node['platform_version'] =~ /1[34]\./
+    elsif node['platform_version'] == '12.04' || node['platform_version'] =~ /1[345]\./
       default['squid']['package'] = 'squid3'
       default['squid']['version'] = '3.1' if node['platform_version'] =~ /13\./
       default['squid']['version'] = '3.3' if node['platform_version'] =~ /14\./
+      default['squid']['version'] = '3.3.8' if node['platform_version'] =~ /15\./
       default['squid']['config_dir'] = '/etc/squid3'
       default['squid']['config_file'] = '/etc/squid3/squid.conf'
       default['squid']['log_dir'] = '/var/log/squid3'
@@ -86,10 +87,9 @@ when 'debian'
       default['squid']['coredump_dir'] = '/var/spool/squid3'
       default['squid']['ldap_program'] = '/usr/lib/squid3/basic_ldap_auth'
       default['squid']['service_name'] = 'squid3'
-    elsif node['platform_version'] == '16.04' || node['platform_version'] =~ /1[56]\./
+    elsif node['platform_version'] == '16.04' || node['platform_version'] =~ /1[6]\./
       default['squid']['package'] = 'squid'
-      default['squid']['version'] = '3.3.8' if node['platform_version'] =~ /15\./
-      default['squid']['version'] = '3.5.12' if node['platform_version'] =~ /16\./
+      default['squid']['version'] = '3.5.12'
       default['squid']['config_dir'] = '/etc/squid'
       default['squid']['config_file'] = '/etc/squid/squid.conf'
       default['squid']['log_dir'] = '/var/log/squid'
