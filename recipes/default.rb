@@ -82,20 +82,23 @@ template node['squid']['config_file'] do
     )
 end
 
-# services
-service_provider = nil
-
-if platform?('ubuntu')
-  if Chef::VersionConstraint.new('>= 15.04').include?(node['platform_version'])
-    service_provider = Chef::Provider::Service::Systemd
-  elsif Chef::VersionConstraint.new('>= 12.04').include?(node['platform_version'])
-    service_provider = Chef::Provider::Service::Upstart
-  end
+template "/etc/systemd/system/squid.service" do
+  source 'systemd/squid.service.erb'
+  owner 'root'
+  group 'root'
+  mode 00744
+  notifies :run, 'execute[systemctl daemon-reload]', :immediately
+  only_if { platform?('ubuntu') && Chef::VersionConstraint.new('>= 15.04').include?(node['platform_version']) }
 end
 
+execute 'systemctl daemon-reload' do
+  action :nothing
+end
+
+# services
 service 'squid' do
   service_name node['squid']['service_name']
-  provider service_provider if platform?('ubuntu')
+  provider platform?('ubuntu') ? find_provider : nil
   supports :restart => true, :status => true, :reload => true
   action [:enable, :start]
 end
