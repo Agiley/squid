@@ -86,7 +86,7 @@ template "/etc/systemd/system/squid.service" do
   source 'systemd/squid.service.erb'
   owner 'root'
   group 'root'
-  mode 00744
+  mode 00644
   notifies :run, 'execute[systemctl daemon-reload]', :immediately
   only_if { platform?('ubuntu') && Chef::VersionConstraint.new('>= 15.04').include?(node['platform_version']) }
 end
