@@ -5,6 +5,7 @@ Description=Squid Web Proxy Cache Server
 After=network.target remote-fs.target nss-lookup.target
 
 [Service]
+Type=forking
 Environment="SQUID_ARGS=-YC"
 ExecStartPre=<%= node['squid']['binary'] %> -z -f <%= node['squid']['config_file'] %>
 ExecStart=<%= node['squid']['binary'] %> -N $SQUID_ARGS -f <%= node['squid']['config_file'] %>
