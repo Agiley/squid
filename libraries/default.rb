@@ -43,3 +43,17 @@ def squid_load_acls(databag_name)
   end
   acls
 end
+
+def squid_find_provider
+  provider        =   nil
+  
+  if platform?('ubuntu')
+    if Chef::VersionConstraint.new('>= 15.04').include?(node['platform_version'])
+      provider    =   Chef::Provider::Service::Systemd
+    elsif Chef::VersionConstraint.new('< 15.04').include?(node['platform_version'])
+      provider    =   Chef::Provider::Service::Upstart
+    end
+  end
+  
+  return provider
+end
