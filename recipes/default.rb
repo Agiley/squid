@@ -98,7 +98,7 @@ end
 # services
 service 'squid' do
   service_name node['squid']['service_name']
-  provider platform?('ubuntu') ? find_provider : nil
+  provider (platform?('ubuntu') && Chef::VersionConstraint.new('>= 15.04').include?(node['platform_version'])) ? Chef::Provider::Service::Systemd : nil
   supports :restart => true, :status => true, :reload => true
   action [:enable, :start]
 end
